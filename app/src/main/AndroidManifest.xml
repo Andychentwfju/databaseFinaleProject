@@ -25,6 +25,7 @@
         <activity android:name=".activities.MostPlayActivity"></activity>
         <activity android:name=".activities.LastAddActivity" />
         <activity android:name=".activities.HistoryActivity" />
+        <activity android:name=".activities.RegisterActivity" />
         <activity
             android:name=".activities.LoginActivity"
             android:label="@string/app_name">

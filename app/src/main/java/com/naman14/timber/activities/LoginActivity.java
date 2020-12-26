@@ -26,7 +26,7 @@ public class LoginActivity extends AppCompatActivity {
     private String TAG = LoginActivity.class.getSimpleName();
     private EditText ename;
     private EditText epassword;
-    private Button elogin;
+    private Button elogin, eregister;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -41,9 +41,22 @@ public class LoginActivity extends AppCompatActivity {
         ename = findViewById(R.id.editTextTextPersonName);
         epassword = findViewById(R.id.editTextTextPersonName2);
         elogin = findViewById(R.id.button);
+        eregister = findViewById(R.id.button3);
 
     }
     private void addEvent() {
+
+        eregister.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // Intent: jump screen type // (LoginActivity.this, (jump to) RegisterActivity.class)
+                Intent toRegister = new Intent(LoginActivity.this, RegisterActivity.class);
+                startActivity(toRegister);
+                finish();
+            }
+        });
+
+
         elogin.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
