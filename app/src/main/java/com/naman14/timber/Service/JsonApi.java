@@ -19,6 +19,6 @@ public interface JsonApi {
     Call<authentication> register(@Body JsonObject register_body);
     @GET("getSongByPlayListId")
     Call<Song> getSongByPlayListId(@Query("Id") int id);
-    @POST("getPlayList")
-    Call<List<Playlist>> getPlaylist(@Query("userid") int id);
+    @POST("getPlaylist")
+    Call<List<Playlist>> getPlaylist(@Body JsonObject getPlaylist_body);
 }

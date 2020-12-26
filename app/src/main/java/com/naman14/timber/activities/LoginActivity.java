@@ -49,8 +49,10 @@ public class LoginActivity extends AppCompatActivity {
         eregister.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                // direct to register activity
                 // Intent: jump screen type // (LoginActivity.this, (jump to) RegisterActivity.class)
-                Intent toRegister = new Intent(LoginActivity.this, RegisterActivity.class);
+                // direct to tmp activity
+                Intent toRegister = new Intent(LoginActivity.this, TmpActivity.class);
                 startActivity(toRegister);
                 finish();
             }

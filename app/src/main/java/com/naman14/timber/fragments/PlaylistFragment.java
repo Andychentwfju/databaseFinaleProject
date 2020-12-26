@@ -40,6 +40,9 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.afollestad.appthemeengine.ATE;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
 import com.google.gson.internal.bind.ReflectiveTypeAdapterFactory;
 import com.naman14.timber.R;
 import com.naman14.timber.Service.ApiService;
@@ -57,6 +60,9 @@ import com.naman14.timber.utils.PreferencesUtility;
 import com.naman14.timber.widgets.DividerItemDecoration;
 import com.naman14.timber.widgets.MultiViewPager;
 
+
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -82,13 +88,13 @@ public class PlaylistFragment extends Fragment {
     private PlaylistAdapter mAdapter;
 
     private List<Playlist> playlists;
-    private  ArrayList<Playlist> returnPlaylist;
+    private  ArrayList<Playlist> returnPlaylist = new ArrayList<>();
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        getPlayLists();
-
+        //getPlayLists();
+        System.out.println("????");
     }
 
     @Override
@@ -102,8 +108,11 @@ public class PlaylistFragment extends Fragment {
         ab.setHomeAsUpIndicator(R.drawable.ic_menu);
         ab.setDisplayHomeAsUpEnabled(true);
         ab.setTitle(R.string.playlists);
-        getPlayLists();
+        //getPlayLists();// ...........................
         initRecyclerView();
+
+        System.out.println("PlayListFragment is GOODY!");
+
         return rootView;
     }
 
@@ -111,44 +120,54 @@ public class PlaylistFragment extends Fragment {
 
 
     private void getPlayLists(){
-        try{
+
+            Integer userID =  LoginActivity.getUser().getId();
+            JSONObject build = new JSONObject();
+        try {
+            build.put("userid", 4);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        JsonParser jsonParser = new JsonParser();
+            JsonObject ToJsonID = (JsonObject) jsonParser.parse(build.toString());
+            System.out.println(ToJsonID);
+
         Retrofit retrofit = new Retrofit.Builder()
-                .baseUrl("http://140.136.151.130/")
+                .baseUrl("http://140.136.151.130:80/")
                 .addConverterFactory(GsonConverterFactory.create())
                 .build();
 
         JsonApi Jsonapi = retrofit.create(JsonApi.class);
-
-        Call<List<Playlist>> placeHolderApis = Jsonapi.getPlaylist(LoginActivity.getUser().getId());
-
+        System.out.println("Before");
+        Call<List<Playlist>> placeHolderApis = Jsonapi.getPlaylist( ToJsonID );
+        System.out.println("After");
         placeHolderApis.enqueue(new Callback<List<Playlist>>() {
             @Override
             public void onResponse(@NonNull Call<List<Playlist>> call, @NonNull Response<List<Playlist>> response) {
                 if (response.isSuccessful()) {
-                    returnPlaylist = new ArrayList<>(response.body().size());
-                    returnPlaylist.addAll(response.body());
+//                    returnPlaylist = new ArrayList<>(response.body().size());
+//                    returnPlaylist.addAll(response.body());
+                    for(Playlist playlist : response.body())
+                        System.out.println("List Name = " + playlist.getPlaylistName());
                 }
+                System.out.println(response.body());
             }
             @Override
             public void onFailure(@NonNull Call<List<Playlist>> call, @NonNull Throwable t) {
                 Toast toast=Toast.makeText(getActivity(),"login failed",Toast.LENGTH_SHORT);
                 toast.show();
+                System.out.println("Error: " + t.toString());
                 t.printStackTrace();
             }
         });
+    }
 
-    }
-                catch (Exception e){
-                    Toast toast=Toast.makeText(getActivity(),e.toString(),Toast.LENGTH_SHORT);
-                    toast.show();
-                }
-    }
 
 
     private void initPager() {
         pager.setVisibility(View.VISIBLE);
         recyclerView.setVisibility(View.GONE);
-        recyclerView.setAdapter(mAdapter);
+        recyclerView.setAdapter(mAdapter);// .........................................
         adapter = new FragmentStatePagerAdapter(getChildFragmentManager()) {
 
             @Override
@@ -272,14 +291,14 @@ public class PlaylistFragment extends Fragment {
     }
 
     public void updatePlaylists(final long id) {
-        getPlayLists();
+        //getPlayLists();
         playlists = returnPlaylist;
         playlistcount = playlists.size();
         mAdapter.updateDataSet(playlists);
     }
 
     public void reloadPlaylists() {
-        getPlayLists();
+        //getPlayLists();
         playlists = returnPlaylist;
             initRecyclerView();
     }
