@@ -36,7 +36,6 @@ public class LoginActivity extends AppCompatActivity {
         addEvent();
     }
 
-
     private void addControl() {
         ename = findViewById(R.id.editTextTextPersonName);
         epassword = findViewById(R.id.editTextTextPersonName2);
